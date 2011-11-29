@@ -1,13 +1,13 @@
 sf2TwigDebug
 ==========
 
-sf2TwigDebug is an easy to use template debugger intended as well for programmers then integrators.
-If you ever lost more than 5 seconds figuring our where was located the template of a specific portion of a webpage,
-or what controller did call the render for a template; this bundle is for you.
+sf2TwigDebug is an easy to use template debugger intended for programmers as well as integrators.
+If you have ever lost more than 5 seconds figuring out where a template for a specific portion of a webpage located,
+or which controller was calling the render for a template; this bundle is for you.
 
 Note that this project is still in a development/beta state.
 
-Requirement
+Requirements
 -----------
 
 - Symfony2
@@ -26,13 +26,13 @@ Open the /deps file, and add
 Run bin/vendors install
 
 2.
-If it's the first bundle that you use from us, make sure to define the namespace
+If it's the first bundle that you use from IdealTech, make sure to appropriately define the namespace
 Open the /app/autoload.php and add the IdealTech namespace in the registerNamespaces array:
 
        'IdealTech'                      => __DIR__.'/../vendor/bundles',
 
 3.
-Tell the bundle to be loaded when you're using the development environment:
+Make it so the bundle is loaded when you're using the development environment:
 Open the /app/appKernel.php and add the TwigDebug bundle in the dev bundle condition:
 
     if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -40,8 +40,8 @@ Open the /app/appKernel.php and add the TwigDebug bundle in the dev bundle condi
         $bundles[] = new IdealTech\TwigDebugBundle\IdealTechTwigDebugBundle();
 
 4.
-You must add the following configuration in your configuration file that is loaded
-for the development environment:
+You must add the following configuration in your configuration file which is loaded
+into the development environment:
 
     twig:
         base_template_class:  "IdealTech\TwigDebugBundle\Twig\Template"
@@ -49,9 +49,9 @@ for the development environment:
 
 Usage
 -----
-When in development environment, simply add a ?templates GET variable in the URL.
-The page you output extra debug information.
+When in the development environment, simply add a ?templates "GET" variable in the URL.
+The page will output extra debug information.
 
-ps.: It is normal to experience layout problems when the extra debugging div are displayed.
+ps.: It is normal to experience layout problems when the extra debugging divs are displayed.
 
-You may also add the experimental ?block variable to visualize where the block are used.
+You may also add the experimental ?block variable to visualize where the blocks are used.
