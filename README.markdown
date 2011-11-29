@@ -1,9 +1,9 @@
 sf2TwigDebug
 ==========
 
-sf2TwigDebug is an easy to use template debugger intended as well for programmer then integration.
+sf2TwigDebug is an easy to use template debugger intended as well for programmers then integrators.
 If you ever lost more than 5 seconds figuring our where was located the template of a specific portion of a webpage,
-or what controller did call the render for a template, this bundle is for you.
+or what controller did call the render for a template; this bundle is for you.
 
 Note that this project is still in a development/beta state.
 
