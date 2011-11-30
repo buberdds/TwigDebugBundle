@@ -7,6 +7,10 @@ or which controller was calling the render for a template; this bundle is for yo
 
 Note that this project is still in a development/beta state.
 
+Preview
+-------
+![Preview](http://img406.imageshack.us/img406/7946/twigdebug.png)
+
 Requirements
 -----------
 
