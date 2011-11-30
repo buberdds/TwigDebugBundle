@@ -16,9 +16,21 @@ namespace IdealTech\TwigDebugBundle\Twig;
  */
 abstract class Template extends \Twig_Template
 {
+    /**
+     * @var boolean
+     */
+    protected $debugFiles  = false;
 
-    private $debugFiles  = false;
-    private $debugBlocks = false;
+    /**
+     * @var boolean
+     */
+    protected $debugBlocks = false;
+
+    /**
+     * @var \Twig_Template
+     */
+    protected $baseTpl;
+
 
     /**
      * Define the debugging options.
@@ -41,6 +53,23 @@ abstract class Template extends \Twig_Template
         parent::__construct($env);
     }
 
+    /**
+     * Render a debug template.
+     * This avoid debugger template to be debugged -- causing an infinite loop.
+     *
+     * @param string $file    File path relative to the bundle view folder.
+     * @param array  $arrVars Array of variables to pass to the view.
+     *
+     * @return null Content is directly outputted.
+     */
+    protected function renderDebug($file, $arrVars)
+    {
+        $loader = new \Twig_Loader_Filesystem(__DIR__ . "/../Resources/views");
+        $env = new \Twig_Environment($loader);
+
+        $template = $env->loadTemplate($file);
+        echo $template->render($arrVars);
+    }
 
     /**
      * Displays the template with the given context.
@@ -59,41 +88,28 @@ abstract class Template extends \Twig_Template
 
 
         //Ok, debugging is activated for files
-        $color = self::random_color();
-        $iColor = self::color_inverse($color);
-        $tpl = $this->getTemplateName();
-        $arrStack = debug_backtrace();
-        $arrStack = array_map(function($arr){
-            $buffer = '<li>';
+        $arrVars = array();
+        $arrVars['backColor']    = self::random_color();
+        $arrVars['foreColor']    = self::color_inverse($arrVars['backColor']);
+        $arrVars['templateName'] = $this->getTemplateName();
+        $arrVars['templatePath'] = $this->env->getLoader()->getCacheKey($arrVars['templateName']);
+        $arrVars['uuid']         = uniqid();
+
+        $arrVars['stack'] = array_map(function($arr){
             if (isset($arr['class'])) {
-                $buffer .= "{$arr['class']}::{$arr['function']}()";
+                return "{$arr['class']}::{$arr['function']}()";
             } else {
-                $buffer .= "{$arr['file']} at line {$arr['line']}";
+                return "{$arr['file']} at line {$arr['line']}";
             }
-            $buffer .= '</li>';
-            return $buffer;
-        }, $arrStack);
-        $txtStack = implode('', $arrStack);
-        $uuid = uniqid();
-        $jsInfoDisplay = "document.getElementById(\"$uuid\").style.display";
+        }, debug_backtrace());
 
-        $basic = 'Template : ' . $tpl;
-        $info = '<br>Path : ' . $this->env->getLoader()->getCacheKey($tpl);
-        $info .= '<br>Stack trace:';
-        $info .= '<pre><ol>';
-        $info .= $txtStack;
-        $info .= '</ol></pre>';
-
-
-        echo "<div style='border:3px solid #$color;'>";
-        echo "<div style='background-color:#$color;color:#$iColor;padding:2px;'>";
-        echo $basic . " (<a href='#' onclick='$jsInfoDisplay = $jsInfoDisplay==\"block\" ? \"none\" : \"block\"' style='color:#$iColor;'>+</a>)";
-        echo "<div id='$uuid' style='display:none;'>$info</div>";
-        echo "</div>";
-
+        //Pass the real content to the debug container.
+        ob_start();
         parent::display($context, $blocks);
+        $arrVars['content'] = ob_get_contents();
+        ob_end_clean();
 
-        echo '</div>';
+        $this->renderDebug('templateContainer.html.twig', $arrVars);
     }
 
 
@@ -115,16 +131,19 @@ abstract class Template extends \Twig_Template
         }
 
         //Ok, debugging is activated for blocks
-        $color = self::random_color();
-        $iColor = self::color_inverse($color);
-        $info = 'Block : ' . $name;
+        $arrVars = array();
+        $arrVars['backColor'] = self::random_color();
+        $arrVars['foreColor'] = self::color_inverse($arrVars['backColor']);
+        $arrVars['blockName'] = $name;
 
-        echo "<div style='border:2px dotted #$color;'>";
-        echo "<div style='background-color:#$color;color:#$iColor;padding:2px;'>$info</div>";
 
+        //Pass the real content to the debug container.
+        ob_start();
         parent::displayBlock($name, $context, $blocks);
+        $arrVars['content'] = ob_get_contents();
+        ob_end_clean();
 
-        echo '</div>';
+        $this->renderDebug('blockContainer.html.twig', $arrVars);
     }
 
 
@@ -133,12 +152,17 @@ abstract class Template extends \Twig_Template
      *
      * @return string
      *
-     * @author Shoo
+     * @author Jonas John
      * @src http://www.jonasjohn.de/snippets/php/random-color.htm
      */
     public static function random_color()
     {
-        return dechex(rand(0, 10000000));
+        mt_srand((double) microtime()*1000000);
+        $c = '';
+        while (strlen($c)<6) {
+            $c .= sprintf("%02X", mt_rand(0, 255));
+        }
+        return $c;
     }
 
     /**

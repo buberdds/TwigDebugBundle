@@ -1,0 +1,10 @@
+<div style='border:2px ridge #{{ backColor }};'>
+    <div style='background-color:#666;color:#fff;padding:2px;'>
+        <em><code>{{ blockName }}</code></em>
+    </div>
+
+    {%- autoescape false -%}
+        {{- content -}}
+    {%- endautoescape -%}
+
+</div>
