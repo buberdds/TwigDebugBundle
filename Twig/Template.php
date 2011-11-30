@@ -28,12 +28,8 @@ abstract class Template extends \Twig_Template
     /**
      * @var boolean
      */
-    protected $debugHyerarchy = false;
+    protected $debugHierarchy = false;
 
-    /**
-     * @var \Twig_Template
-     */
-    protected $baseTpl;
 
 
     protected static $templateDeep = 1;
@@ -141,8 +137,7 @@ abstract class Template extends \Twig_Template
         $this->renderDebug('templateContainer.html.twig', $arrVars);
 
 
-
-        if (self::$templateParent && $this->debugHierarchy) {
+        if ($this->debugHierarchy && self::$templateParent == '') {
             $this->showTemplateHierarchy();
 
         }
