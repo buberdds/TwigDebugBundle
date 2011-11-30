@@ -24,10 +24,6 @@ abstract class Template extends \Twig_Template
     /**
      * @var boolean
      */
-    protected $debugBlocks = false;
-    /**
-     * @var boolean
-     */
     protected $debugHierarchy = false;
 
 
@@ -50,16 +46,25 @@ abstract class Template extends \Twig_Template
             $this->debugFiles = true;
         }
 
-        if (isset($_GET['blocks'])) {
-            $this->debugBlocks = true;
-        }
-
         if (isset($_GET['hierarchy'])) {
             $this->debugHierarchy = true;
         }
 
 
         parent::__construct($env);
+
+
+        //The twig extentions are not available, so we'll consider that
+        //there can only be 1 root template, and dump the JS and the CSS on the page.
+        if (self::$templateParent == '') {
+            echo '<style type="text/css">';
+            echo file_get_contents(__DIR__ . "/../Resources/public/css/twigDebug.css");
+            echo '</style>';
+
+            echo '<script type="text/javascript">';
+            echo file_get_contents(__DIR__ . "/../Resources/public/js/twigDebug.js");
+            echo '</script>';
+        }
     }
 
     /**
@@ -171,7 +176,7 @@ abstract class Template extends \Twig_Template
      */
     public function displayBlock($name, array $context, array $blocks = array())
     {
-        if (!$this->debugBlocks) {
+        if (!$this->debugFiles) {
             parent::displayBlock($name, $context, $blocks);
             return null;
         }

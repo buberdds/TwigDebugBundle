@@ -1,0 +1,46 @@
+
+.TD-template-container{
+    border:4px ridge;
+}
+
+.TD-template-container>.TD-template-info{
+    background-color:#333;
+    color:#fff;
+    padding:2px;
+}
+
+.TD-template-container>.TD-template-info>.TD-template-extra-info{
+    display:none;
+    background-color:#ccc;
+    border:2px inset #fff;
+    color:#000;
+    padding:2px;
+    font-size:0.8em;
+}
+
+.TD-template-container>.TD-template-info>.TD-template-extra-info li{
+    padding-bottom:0px;
+}
+
+
+.hideBlock .TD-block-container{
+    border:0px;
+    display:inline;
+}
+
+.hideBlock .TD-block-container>.TD-block-name{
+    display:none;
+}
+
+
+.showBlock .TD-block-container{
+    border:2px ridge;
+    display:block;
+}
+
+.showBlock .TD-block-container>.TD-block-name{
+    display:inline;
+    background-color:#666;
+    color:#fff;
+    padding:2px;
+}

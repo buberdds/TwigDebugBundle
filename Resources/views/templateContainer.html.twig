@@ -1,24 +1,19 @@
-<script type="text/javascript">
-    function toggle{{ uuid }}(){
-        var display = document.getElementById("{{ uuid }}").style.display;
-        document.getElementById("{{ uuid }}").style.display = display == 'none' ? 'block' : 'none';
-        return false;
-    }
-</script>
 
-<div style='border:4px ridge #{{ backColor }};'>
-    <div style='background-color:#333;color:#fff;padding:2px;'>
-        <code>{{ templateName }}</code> (<a href="#" onclick="return toggle{{ uuid }}();" style="color:#{{foreColor}};">+</a>)
-        <div id='{{ uuid }}' style='display:none;background-color:#ccc;border:2px inset #fff;color:#000;padding:2px;font-size:0.8em;'>
+<div class="TD-template-container hideBlock" style="border-color:#{{ backColor }};">
+    <div class="TD-template-info">
+        <code>{{ templateName }}</code>
+        (<a href="#" onclick="return TDToggleTemplateExtraInfo('{{ uuid }}');" style="color:#{{foreColor}};">+ details</a>)
+        (<a href="#" onclick="return TDToggleTemplatesBlocks('{{ uuid }}');" style="color:#{{foreColor}};">toggle content block</a>)
+        <div id="{{ uuid }}" class="TD-template-extra-info" style="display:none;">
             <span>Path : <code>{{ templatePath }}</code></span>
             <br><span>Parent : <code>{{ parent }}</code></span>
             <br><span>Deep : <code>{{ deep }}</code></span>
             <br><span>Stack trace:</span>
-            <pre><ol>
+            <ol>
                 {%- for trace in stack -%}
                     <li>{{trace}}</li>
                 {%- endfor -%}
-            </ol></pre>
+            </ol>
         </div>
     </div>
 
