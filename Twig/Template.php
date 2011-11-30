@@ -25,12 +25,20 @@ abstract class Template extends \Twig_Template
      * @var boolean
      */
     protected $debugBlocks = false;
+    /**
+     * @var boolean
+     */
+    protected $debugHyerarchy = false;
 
     /**
      * @var \Twig_Template
      */
     protected $baseTpl;
 
+
+    protected static $templateDeep = 1;
+    protected static $templateParent = '';
+    protected static $arrTemplateHierarchy = array();
 
     /**
      * Define the debugging options.
@@ -49,6 +57,11 @@ abstract class Template extends \Twig_Template
         if (isset($_GET['blocks'])) {
             $this->debugBlocks = true;
         }
+
+        if (isset($_GET['hierarchy'])) {
+            $this->debugHierarchy = true;
+        }
+
 
         parent::__construct($env);
     }
@@ -94,6 +107,10 @@ abstract class Template extends \Twig_Template
         $arrVars['templateName'] = $this->getTemplateName();
         $arrVars['templatePath'] = $this->env->getLoader()->getCacheKey($arrVars['templateName']);
         $arrVars['uuid']         = uniqid();
+        $arrVars['deep']         = self::$templateDeep;
+        $arrVars['parent']       = self::$templateParent;
+
+
 
         $arrVars['stack'] = array_map(function($arr){
             if (isset($arr['class'])) {
@@ -103,13 +120,47 @@ abstract class Template extends \Twig_Template
             }
         }, debug_backtrace());
 
+
+        self::$arrTemplateHierarchy[] = array(
+            'template' => $this->getTemplateName(),
+            'parent'   => self::$templateParent,
+            'deep'     => self::$templateDeep,
+        );
+
+
         //Pass the real content to the debug container.
+        $oldParent = self::$templateParent;
+        self::$templateParent = $this->getTemplateName();
+        self::$templateDeep++;
         ob_start();
         parent::display($context, $blocks);
         $arrVars['content'] = ob_get_contents();
         ob_end_clean();
-
+        self::$templateDeep--;
+        self::$templateParent = $oldParent;
         $this->renderDebug('templateContainer.html.twig', $arrVars);
+
+
+
+        if (self::$templateParent && $this->debugHierarchy) {
+            $this->showTemplateHierarchy();
+
+        }
+    }
+
+    /**
+     * Render the template hierarchy debug.
+     *
+     * @return null Content is directly outputted.
+     */
+    protected function showTemplateHierarchy()
+    {
+        $arrVars = array(
+            'arrTpl' => self::$arrTemplateHierarchy,
+        );
+
+        $this->renderDebug('templateHierarchy.html.twig', $arrVars);
+
     }
 
 

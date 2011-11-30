@@ -54,4 +54,12 @@ The page will output extra debug information.
 
 ps.: It is normal to experience layout problems when the extra debugging divs are displayed.
 
-You may also add the experimental ?block variable to visualize where the blocks are used.
+Experimental GET arguments
+--------------------------
+
+?block
+To visualize where the twig content blocks are used.
+
+&hierarchy
+Require the ?templates argument.
+Will attempt to display the template hierarchy at the bottom of the page. (which template is included by who).

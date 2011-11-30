@@ -1,0 +1,14 @@
+<strong>Template Hierarchy :</strong>
+
+<pre style="background-color:#ccc;border:1px solid #000;">
+{%- for tpl in arrTpl -%}
+    <br>
+    {%- for i in 1..(tpl.deep) -%}
+        {%- if(i == tpl.deep) %} - {% else %}    {% endif -%}
+    {%- endfor -%}
+
+    {{ tpl.template }}
+
+{%- endfor -%}
+
+</pre>
