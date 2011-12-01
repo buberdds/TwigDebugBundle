@@ -56,7 +56,7 @@ abstract class Template extends \Twig_Template
 
         //The twig extentions are not available, so we'll consider that
         //there can only be 1 root template, and dump the JS and the CSS on the page.
-        if (self::$templateParent == '') {
+        if ($this->debugFiles && self::$templateParent == '') {
             echo '<style type="text/css">';
             echo file_get_contents(__DIR__ . "/../Resources/public/css/twigDebug.css");
             echo '</style>';
