@@ -1,4 +1,4 @@
-sf2TwigDebug
+IdealTechTwigDebugBundle
 ==========
 
 sf2TwigDebug is an easy to use template debugger intended for programmers as well as integrators.
@@ -44,8 +44,7 @@ Open the /app/appKernel.php and add the TwigDebug bundle in the dev bundle condi
         $bundles[] = new IdealTech\TwigDebugBundle\IdealTechTwigDebugBundle();
 
 4.
-You must add the following configuration in your configuration file which is loaded
-into the development environment:
+You must add the following configuration in config/config_dev.yml file:
 
     twig:
         base_template_class:  "IdealTech\TwigDebugBundle\Twig\Template"
