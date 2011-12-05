@@ -24,7 +24,7 @@ Installation
 Open the /deps file, and add
 
     [IdealTechTwigDebugBundle]
-        git=git://github.com/idealtech/sf2TwigDebug.git
+        git=git://github.com/idealtech/TwigDebugBundle.git
         target=bundles/IdealTech/TwigDebugBundle
 
 Run bin/vendors install
