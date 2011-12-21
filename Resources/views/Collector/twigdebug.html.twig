@@ -1,0 +1,9 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}{% endset %}
+    {% set text -%}
+        <span style="cursor: pointer;">TwigDebug</span>
+    {%- endset %}
+    {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
