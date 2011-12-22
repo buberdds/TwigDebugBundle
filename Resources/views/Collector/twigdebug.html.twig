@@ -1,9 +1,16 @@
 {% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
 
 {% block toolbar %}
-    {% set icon %}{% endset %}
+    {% set icon %}
+        <!-- icon based on: http://www.iconarchive.com/show/led-icons-by-led24.de/layout-icon.html -->
+        <img width=16 alt="Twig Debug" src="{{ asset('bundles/idealtechtwigdebug/images/twigdebug.png') }}" style="border-width: 0; vertical-align: middle; margin-right: 5px;" />
+    {% endset %}
     {% set text -%}
-        <span style="cursor: pointer;">TwigDebug</span>
+        <span>
+            <a href="?twig_debug=1" style="color: #2f2f2f; cursor: pointer;">on</a>
+            /
+            <a href="?twig_debug=0" style="color: #2f2f2f; cursor: pointer;">off</a>
+        </span>
     {%- endset %}
     {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
 {% endblock %}

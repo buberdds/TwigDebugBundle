@@ -39,11 +39,23 @@ abstract class Template extends \Twig_Template
      */
     public function __construct(\Twig_Environment $env)
     {
-        $bundleName = substr($this->getTemplateName(), 0, strpos($this->getTemplateName(), ':'));
+        @session_start();
 
-        //Make sure we're not debugging the profiler tool bar
-        if ($bundleName != 'WebProfilerBundle' && isset($_GET['templates'])) {
-            $this->debugFiles = true;
+        //Check if we need to start a debug session
+        //(this condition won't be triggered by AJAX-requests, so we need the session)
+        if (isset($_GET['twig_debug'])) {
+            $_SESSION['twig_debug'] = (bool)$_GET['twig_debug'];
+        }
+
+        //Check if a debug session was previously started
+        if (isset($_SESSION['twig_debug'])) {
+            $this->debugFiles = (bool)$_SESSION['twig_debug'];
+        }
+
+        //Do not debug the profiler tool bar
+        $bundleName = substr($this->getTemplateName(), 0, strpos($this->getTemplateName(), ':'));
+        if ($bundleName == 'WebProfilerBundle') {
+            $this->debugFiles = false;
         }
 
         if (isset($_GET['hierarchy'])) {
