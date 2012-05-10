@@ -76,7 +76,7 @@ abstract class Template extends \Twig_Template
      */
     public function display(array $context, array $blocks = array())
     {
-        $this->displayWithErrorHandling($this->mergeContextWithGlobals($context), $blocks);
+    	  $this->displayWithErrorHandling($this->env->mergeGlobals($context), $blocks);
         if ($this->debugFiles) {
             $arrVars['templatePath'] = $this->env->getLoader()->getCacheKey($this->getTemplateName());
             $this->renderDebug('templateList.html.twig', $arrVars);
