@@ -8,4 +8,4 @@ https://github.com/buberdds/TwigDebugBundle/wiki
 
 TODO
 ==========
-Use DataCollector instead overriding Twig base_template_class
+Use DataCollector instead of overriding Twig base_template_class
